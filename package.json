@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --colors --host 0.0.0.0",
+    "start-test": "nodemon js/index.js",
     "build-watch": "webpack -w",
     "test": ""
   },
@@ -16,6 +17,7 @@
     "pixi.js": "^4.5.6"
   },
   "devDependencies": {
-    "webpack": "^3.6.0"
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.8.2"
   }
 }

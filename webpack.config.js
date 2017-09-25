@@ -2,7 +2,7 @@ var path = require( 'path' );
 module.exports = {
     entry: "./js/index.js",
     output: {
-        filename: "./public/bundle.js"
+        filename: "./js/bundle.js"
     },
     node: {
 		fs: 'empty'

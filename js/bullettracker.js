@@ -1,39 +1,39 @@
-const PIXI = require( 'pixi.js' );
-const SPEED = 7;
+const PIXI = require('pixi.js')
+const SPEED = 15;
 
-module.exports = class BulletManager{
+module.exports = class Bullettracker{
 	constructor( game, initialBullets ) {
 		this._game = game;
-		this._game.on( 'update', this._update.bind( this ) );
+		this._game.on('update', this._update.bind( this ) );
 		this._activeBullets = [];
 		this._passiveBullets = [];
-		this._texture = PIXI.Texture.fromImage( '/img/bullet.png' );
-		for( var i = 0; i < initialBullets; i++ ) {
+		this._texture = PIXI.Texture.fromImage('/img/bullet.png');
+		for( var i = 0; i < initialBullets;i++) {
 			this._createBullet();
 		}
 	}
 
-	add( x, y, alpha, spaceShip ) {
+	add(x,y,alpha,survivor) {
 		if( this._passiveBullets.length === 0 ) {
 			this._createBullet();
 		}
 
 		var bullet = this._passiveBullets.pop();
-		bullet.tint = spaceShip.tint;
+		bullet.tint = survivor.tint;
 		bullet.position.x = x;
 		bullet.position.y = y;
 		bullet.rotation = alpha;
-		bullet.source = spaceShip;
+		bullet.source = survivor;
 		this._activeBullets.push( bullet );
 	}
 
 	_update() {
-		var i, s, bullet;
+		var bullet;
 
-		for( i = 0; i < this._activeBullets.length; i++ ) {
-			bullet = this._activeBullets[ i ];
-			bullet.position.x += Math.sin( bullet.rotation ) * SPEED;
-			bullet.position.y -= Math.cos( bullet.rotation ) * SPEED;
+		for( var i = 0; i < this._activeBullets.length; i++ ) {
+			bullet = this._activeBullets[i];
+			bullet.position.x += Math.sin(bullet.rotation) * SPEED;
+			bullet.position.y -= Math.cos(bullet.rotation) * SPEED;
 
 			if(
 				bullet.position.x < 0 ||
@@ -41,15 +41,13 @@ module.exports = class BulletManager{
 				bullet.position.y < 0 ||
 				bullet.position.y > this._game.renderer.height
 			) {
-				// Bullet has left the stage, time to recycle it
 				this._recycleBullet( bullet, i );
 			} else {
-				// Bullet is still on stage, let's perform hit detection
-				for( s = 0; s < this._game.spaceShips.length; s++ ) {
-					if( this._game.spaceShips[ s ] === bullet.source ) {
+				for( var s = 0; s < this._game.survivors.length; s++ ) {
+					if( this._game.survivors[ s ] === bullet.source ) {
 						continue;
 					}
-					if( this._game.spaceShips[ s ].checkHit( bullet.position ) ) {
+					if( this._game.survivors[ s ].checkHit( bullet.position ) ) {
 						this._recycleBullet( bullet, i );
 						continue;
 					}
